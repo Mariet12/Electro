@@ -1,97 +1,99 @@
-# Electro - متجر الإلكترونيات
+# Electro - Electronics Store
 
-واجهة أمامية حديثة ومتكاملة لمتجر إلكتروني مبنية بـ Next.js 14 و TypeScript و Tailwind CSS.
+Modern and comprehensive frontend for an electronics e-commerce store built with Next.js 14, TypeScript, and Tailwind CSS.
 
-## 🚀 المميزات
+## 🚀 Features
 
-### للمستخدمين
-- ✅ نظام تسجيل دخول وإنشاء حساب متكامل
-- ✅ إعادة تعيين كلمة المرور عبر OTP
-- ✅ تصفح المنتجات مع فلاتر متقدمة
-- ✅ البحث عن المنتجات
-- ✅ سلة تسوق ديناميكية
-- ✅ نظام طلبات متكامل
-- ✅ تتبع حالة الطلبات
-- ✅ المنتجات المفضلة
-- ✅ الإشعارات
-- ✅ صفحة الملف الشخصي
-- ✅ صفحة التواصل معنا
+### For Users
 
-### للمديرين
-- ✅ لوحة تحكم إدارية
-- ✅ إدارة الطلبات وتحديث حالاتها
-- ✅ عرض إحصائيات المبيعات
-- ✅ إدارة حالات الدفع
+✅ Complete login and registration system  
+✅ Password reset via OTP  
+✅ Product browsing with advanced filters  
+✅ Product search  
+✅ Dynamic shopping cart  
+✅ Complete order system  
+✅ Order status tracking  
+✅ Favorite products  
+✅ Notifications  
+✅ Profile page  
+✅ Contact us page  
 
-## 📦 التقنيات المستخدمة
+### For Administrators
+
+✅ Admin dashboard  
+✅ Order management and status updates  
+✅ Sales statistics  
+✅ Payment status management  
+
+## 📦 Technologies Used
 
 - **Next.js 14** - App Router
-- **TypeScript** - للكتابة الآمنة
-- **Tailwind CSS** - للتصميم
-- **Axios** - للتواصل مع الـ API
-- **React Context** - لإدارة الحالة
-- **React Hot Toast** - للإشعارات
-- **React Icons** - للأيقونات
-- **date-fns** - لتنسيق التواريخ
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Styling
+- **Axios** - API communication
+- **React Context** - State management
+- **React Hot Toast** - Notifications
+- **React Icons** - Icons
+- **date-fns** - Date formatting
 
-## 🛠️ التثبيت والتشغيل
+## 🛠️ Installation & Setup
 
-### المتطلبات الأساسية
-- Node.js 18+ 
-- npm أو yarn أو pnpm
+### Prerequisites
 
-### خطوات التثبيت
+- Node.js 18+
+- npm, yarn, or pnpm
 
-1. **تثبيت الحزم:**
+### Installation Steps
+
+1. **Install dependencies:**
 ```bash
 cd electro-frontend
 npm install
 ```
 
-2. **إعداد ملف البيئة:**
-قم بإنشاء ملف `.env.local` في المجلد الرئيسي:
+2. **Environment setup:** Create a `.env.local` file in the root directory:
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-3. **تشغيل المشروع:**
+3. **Run the project:**
 
-**وضع التطوير:**
+**Development mode:**
 ```bash
 npm run dev
 ```
 
-**البناء للإنتاج:**
+**Production build:**
 ```bash
 npm run build
 npm start
 ```
 
-المشروع سيعمل على: [http://localhost:3000](http://localhost:3000)
+The project will run on: [http://localhost:3000](http://localhost:3000)
 
-## 📁 هيكل المشروع
+## 📁 Project Structure
 
 ```
 electro-frontend/
-├── app/                      # صفحات Next.js (App Router)
-│   ├── admin/               # صفحات الإدارة
-│   ├── cart/                # صفحة السلة
-│   ├── categories/          # صفحة الفئات
-│   ├── checkout/            # صفحة إتمام الطلب
-│   ├── contact/             # صفحة التواصل
-│   ├── favorites/           # صفحة المفضلة
-│   ├── forgot-password/     # نسيان كلمة المرور
-│   ├── login/               # تسجيل الدخول
-│   ├── notifications/       # الإشعارات
-│   ├── orders/              # الطلبات
-│   ├── products/            # المنتجات
-│   ├── profile/             # الملف الشخصي
-│   ├── register/            # التسجيل
-│   ├── reset-password/      # إعادة تعيين كلمة المرور
-│   ├── verify-otp/          # التحقق من OTP
-│   ├── layout.tsx           # Layout رئيسي
-│   └── page.tsx             # الصفحة الرئيسية
-├── components/              # المكونات القابلة لإعادة الاستخدام
+├── app/                      # Next.js pages (App Router)
+│   ├── admin/               # Admin pages
+│   ├── cart/                # Cart page
+│   ├── categories/          # Categories page
+│   ├── checkout/            # Checkout page
+│   ├── contact/             # Contact page
+│   ├── favorites/           # Favorites page
+│   ├── forgot-password/     # Forgot password
+│   ├── login/               # Login
+│   ├── notifications/       # Notifications
+│   ├── orders/              # Orders
+│   ├── products/            # Products
+│   ├── profile/             # Profile
+│   ├── register/            # Registration
+│   ├── reset-password/      # Reset password
+│   ├── verify-otp/          # OTP verification
+│   ├── layout.tsx           # Main layout
+│   └── page.tsx             # Home page
+├── components/              # Reusable components
 │   ├── Navbar.tsx
 │   ├── Footer.tsx
 │   ├── Hero.tsx
@@ -104,111 +106,111 @@ electro-frontend/
 │   └── CartContext.tsx
 ├── lib/                     # Utilities
 │   └── api.ts              # Axios instance
-├── public/                  # الملفات الثابتة
-├── .env.local              # متغيرات البيئة
-├── next.config.js          # إعدادات Next.js
-├── tailwind.config.ts      # إعدادات Tailwind
+├── public/                  # Static files
+├── .env.local              # Environment variables
+├── next.config.js          # Next.js configuration
+├── tailwind.config.ts      # Tailwind configuration
 └── package.json
 ```
 
 ## 🔌 API Integration
 
-المشروع يتكامل مع API الخاص بـ Electro Backend (.NET)
+The project integrates with the Electro Backend API (.NET)
 
-### Endpoints المستخدمة:
+### Used Endpoints:
 
-**المصادقة:**
-- `POST /api/account/register` - إنشاء حساب
-- `POST /api/account/login` - تسجيل الدخول
-- `GET /api/account/user-info` - بيانات المستخدم
-- `PUT /api/account/update-user` - تحديث الملف الشخصي
-- `PUT /api/account/change-password` - تغيير كلمة المرور
-- `POST /api/account/forgot-password` - نسيان كلمة المرور
-- `POST /api/account/verify-otp` - التحقق من OTP
-- `PUT /api/account/reset-password` - إعادة تعيين كلمة المرور
+**Authentication:**
+- `POST /api/account/register` - Create account
+- `POST /api/account/login` - Login
+- `GET /api/account/user-info` - User data
+- `PUT /api/account/update-user` - Update profile
+- `PUT /api/account/change-password` - Change password
+- `POST /api/account/forgot-password` - Forgot password
+- `POST /api/account/verify-otp` - Verify OTP
+- `PUT /api/account/reset-password` - Reset password
 
-**المنتجات:**
-- `GET /api/products` - قائمة المنتجات مع الفلاتر
-- `GET /api/products/{id}` - تفاصيل منتج
-- `GET /api/products/latest` - أحدث المنتجات
-- `GET /api/products/best-selling` - الأكثر مبيعاً
+**Products:**
+- `GET /api/products` - Product list with filters
+- `GET /api/products/{id}` - Product details
+- `GET /api/products/latest` - Latest products
+- `GET /api/products/best-selling` - Best selling products
 
-**الفئات:**
-- `GET /api/category` - قائمة الفئات
+**Categories:**
+- `GET /api/category` - Category list
 
-**السلة:**
-- `GET /api/cart` - عرض السلة
-- `POST /api/cart/add` - إضافة للسلة
-- `PUT /api/cart/items` - تحديث الكمية
-- `DELETE /api/cart/items/{id}` - حذف من السلة
-- `DELETE /api/cart` - تفريغ السلة
+**Cart:**
+- `GET /api/cart` - View cart
+- `POST /api/cart/add` - Add to cart
+- `PUT /api/cart/items` - Update quantity
+- `DELETE /api/cart/items/{id}` - Remove from cart
+- `DELETE /api/cart` - Clear cart
 
-**الطلبات:**
-- `POST /api/orders/checkout` - إنشاء طلب
-- `GET /api/orders` - طلبات المستخدم
-- `GET /api/orders/{id}` - تفاصيل طلب
-- `PUT /api/orders/{id}/cancel` - إلغاء طلب
-- `GET /api/orders/admin/all` - كل الطلبات (Admin)
-- `PUT /api/orders/{id}/status` - تحديث حالة الطلب (Admin)
+**Orders:**
+- `POST /api/orders/checkout` - Create order
+- `GET /api/orders` - User orders
+- `GET /api/orders/{id}` - Order details
+- `PUT /api/orders/{id}/cancel` - Cancel order
+- `GET /api/orders/admin/all` - All orders (Admin)
+- `PUT /api/orders/{id}/status` - Update order status (Admin)
 
-**المفضلة:**
-- `GET /api/favorites` - قائمة المفضلة
-- `POST /api/favorites` - إضافة للمفضلة
-- `DELETE /api/favorites/{id}` - حذف من المفضلة
+**Favorites:**
+- `GET /api/favorites` - Favorites list
+- `POST /api/favorites` - Add to favorites
+- `DELETE /api/favorites/{id}` - Remove from favorites
 
-**الإشعارات:**
-- `GET /api/notifications` - قائمة الإشعارات
-- `PUT /api/notifications/{id}/read` - تعليم كمقروء
+**Notifications:**
+- `GET /api/notifications` - Notifications list
+- `PUT /api/notifications/{id}/read` - Mark as read
 
-**التواصل:**
-- `POST /api/admincontact` - إرسال رسالة
+**Contact:**
+- `POST /api/admincontact` - Send message
 
-## 🎨 التصميم
+## 🎨 Design
 
-التصميم مبني على:
-- **نظام الألوان:** Primary (أزرق)، مع دعم الوضع الليلي
-- **Typography:** خط Cairo للعربية
-- **Responsive Design:** متجاوب مع جميع الشاشات
-- **RTL Support:** دعم كامل للعربية
+The design is built on:
+- **Color System:** Primary (blue), with dark mode support
+- **Typography:** Cairo font for Arabic
+- **Responsive Design:** Responsive across all screen sizes
+- **RTL Support:** Full Arabic support
 
-## 🔒 الأمان
+## 🔒 Security
 
-- ✅ JWT Authentication
-- ✅ Axios Interceptors للتعامل مع التوكنات
-- ✅ Protected Routes
-- ✅ Input Validation
-- ✅ HTTPS في الإنتاج
+✅ JWT Authentication  
+✅ Axios Interceptors for token handling  
+✅ Protected Routes  
+✅ Input Validation  
+✅ HTTPS in production  
 
-## 📱 الصفحات
+## 📱 Pages
 
-### العامة
-- `/` - الصفحة الرئيسية
-- `/products` - قائمة المنتجات
-- `/products/[id]` - تفاصيل منتج
-- `/categories` - الفئات
-- `/contact` - التواصل
+### Public
+- `/` - Home page
+- `/products` - Product list
+- `/products/[id]` - Product details
+- `/categories` - Categories
+- `/contact` - Contact
 
-### المستخدم
-- `/login` - تسجيل الدخول
-- `/register` - إنشاء حساب
-- `/forgot-password` - نسيان كلمة المرور
-- `/verify-otp` - التحقق من OTP
-- `/reset-password` - إعادة تعيين كلمة المرور
-- `/profile` - الملف الشخصي
-- `/cart` - السلة
-- `/checkout` - إتمام الطلب
-- `/orders` - الطلبات
-- `/orders/[id]` - تفاصيل طلب
-- `/favorites` - المفضلة
-- `/notifications` - الإشعارات
+### User
+- `/login` - Login
+- `/register` - Create account
+- `/forgot-password` - Forgot password
+- `/verify-otp` - OTP verification
+- `/reset-password` - Reset password
+- `/profile` - Profile
+- `/cart` - Cart
+- `/checkout` - Checkout
+- `/orders` - Orders
+- `/orders/[id]` - Order details
+- `/favorites` - Favorites
+- `/notifications` - Notifications
 
-### الإدارة (Admin)
-- `/admin` - لوحة التحكم
-- `/admin/orders` - إدارة الطلبات
+### Administration (Admin)
+- `/admin` - Dashboard
+- `/admin/orders` - Order management
 
-## 🚀 النشر
+## 🚀 Deployment
 
-### Vercel (موصى به)
+### Vercel (Recommended)
 
 ```bash
 npm run build
@@ -222,26 +224,28 @@ docker build -t electro-frontend .
 docker run -p 3000:3000 electro-frontend
 ```
 
-## 🤝 المساهمة
+## 🤝 Contributing
 
-المساهمات مرحب بها! يرجى:
-1. عمل Fork للمشروع
-2. إنشاء branch جديد
-3. Commit التغييرات
-4. Push للـ branch
-5. فتح Pull Request
+Contributions are welcome! Please:
 
-## 📝 الترخيص
+1. Fork the project
+2. Create a new branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
-هذا المشروع مرخص تحت MIT License
+## 📝 License
 
-## 📞 الدعم
+This project is licensed under the MIT License
 
-للدعم والمساعدة:
-- Email: info@electro.com
-- Phone: +20 123 456 7890
+## 📞 Support
+
+For support and assistance:
+
+- **Email:** marietayman1@gmail.com
+- **Phone:** 01206799037
 
 ---
 
-تم البناء بـ ❤️ باستخدام Next.js و TypeScript
+Built with ❤️ using Next.js and TypeScript
 
