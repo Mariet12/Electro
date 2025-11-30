@@ -18,6 +18,12 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
+    
+    // إذا كانت البيانات FormData، احذف Content-Type للسماح لـaxios بإضافته تلقائياً
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type'];
+    }
+    
     return config;
   },
   (error) => {

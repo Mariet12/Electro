@@ -29,10 +29,6 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
-  // تحسين الـ bundle
-  experimental: {
-    optimizeCss: true,
-  },
 }
 
 module.exports = nextConfig

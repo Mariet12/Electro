@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -17,6 +17,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     fetchProduct();
@@ -33,11 +34,41 @@ export default function ProductDetailPage() {
     }
   };
 
+  const stockInfo = useMemo(() => {
+    if (!product || typeof product.stock !== 'number') {
+      return { value: null, isOutOfStock: false, max: Number.MAX_SAFE_INTEGER };
+    }
+    return {
+      value: product.stock,
+      isOutOfStock: product.stock <= 0,
+      max: Math.max(1, product.stock),
+    };
+  }, [product]);
+
+  const handleDecrease = () => {
+    setQuantity((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleIncrease = () => {
+    setQuantity((prev) => {
+      const next = prev + 1;
+      return Math.min(stockInfo.max, next);
+    });
+  };
+
   const handleAddToCart = async () => {
+    if (stockInfo.isOutOfStock) {
+      toast.error('هذا المنتج غير متوفر حالياً');
+      return;
+    }
+
+    setAdding(true);
     try {
       await addToCart(product.id, quantity);
     } catch (error) {
-      // Error handled in context
+      // Error handled inside addToCart / interceptor
+    } finally {
+      setAdding(false);
     }
   };
 
@@ -164,14 +195,20 @@ export default function ProductDetailPage() {
                 )}
                 <div className="flex justify-between">
                   <span className="text-gray-600">الحالة:</span>
-                  <span className={`font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {product.stock > 0 ? `متوفر (${product.stock})` : 'غير متوفر'}
-                  </span>
+                  {stockInfo.value === null ? (
+                    <span className="font-semibold text-green-600">متوفر</span>
+                  ) : stockInfo.isOutOfStock ? (
+                    <span className="font-semibold text-red-600">غير متوفر</span>
+                  ) : (
+                    <span className="font-semibold text-green-600">
+                      متوفر ({stockInfo.value})
+                    </span>
+                  )}
                 </div>
               </div>
 
               {/* الكمية والإضافة للسلة */}
-              {product.stock > 0 && (
+              {!stockInfo.isOutOfStock && (
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     الكمية
@@ -179,14 +216,16 @@ export default function ProductDetailPage() {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center border border-gray-300 rounded-lg">
                       <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        type="button"
+                        onClick={handleDecrease}
                         className="p-3 hover:bg-gray-100"
                       >
                         <FiMinus />
                       </button>
                       <span className="px-6 py-2 font-semibold">{quantity}</span>
                       <button
-                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                        type="button"
+                        onClick={handleIncrease}
                         className="p-3 hover:bg-gray-100"
                       >
                         <FiPlus />
@@ -194,10 +233,11 @@ export default function ProductDetailPage() {
                     </div>
                     <button
                       onClick={handleAddToCart}
-                      className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 flex items-center justify-center gap-2"
+                      disabled={adding}
+                      className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 flex items-center justify-center gap-2 disabled:bg-gray-400"
                     >
                       <FiShoppingCart />
-                      <span>أضف للسلة</span>
+                      <span>{adding ? 'جاري الإضافة...' : 'أضف للسلة'}</span>
                     </button>
                   </div>
                 </div>

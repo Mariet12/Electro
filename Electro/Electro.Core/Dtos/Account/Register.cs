@@ -25,7 +25,7 @@ namespace Electro.Core.Dtos.Account
         [Required]
         public string Role { get; set; }
 
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
 
     }
 }

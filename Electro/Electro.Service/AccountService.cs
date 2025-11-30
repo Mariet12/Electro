@@ -21,6 +21,7 @@ namespace Electro.Service
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly MailSettings _mailSettings;
         private readonly ITokenService _tokenService;
         private readonly IOtpService _otpService;
@@ -33,6 +34,7 @@ namespace Electro.Service
 
         public AccountService(
             UserManager<AppUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IOptionsMonitor<MailSettings> mailSettings,
             ITokenService tokenService,
             IOtpService otpService,
@@ -43,12 +45,13 @@ namespace Electro.Service
             IFileService fileService,AppIdentityDbContext context)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _mailSettings = mailSettings.CurrentValue;
             _tokenService = tokenService;
             _otpService = otpService;
             _context = context;
             _cache = cache;
-            _signInManager = signInManager;
+            //_signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _fileService = fileService;
@@ -56,6 +59,13 @@ namespace Electro.Service
 
         public async Task<ApiResponse> RegisterAsync(Register dto)
         {
+            // Validate Role
+            var role = string.IsNullOrWhiteSpace(dto.Role) ? "User" : dto.Role;
+            
+            // Check if role exists
+            var roleManager = _userManager.GetType().GetProperty("RoleManager")?.GetValue(_userManager) as RoleManager<IdentityRole>;
+            // بدلاً من ذلك، سنستخدم طريقة أخرى للتحقق من الـRole
+            
             // Check if user already exists
             var existingUser = await _userManager.FindByEmailAsync(dto.Email);
             if (existingUser != null)
@@ -89,7 +99,14 @@ namespace Electro.Service
             }
 
             // Assign role
-            await _userManager.AddToRoleAsync(user, dto.Role);
+            var roleResult = await _userManager.AddToRoleAsync(user, dto.Role);
+            if (!roleResult.Succeeded)
+            {
+                // إذا فشل إضافة الـRole، احذف المستخدم الذي تم إنشاؤه
+                await _userManager.DeleteAsync(user);
+                var roleErrors = string.Join(" | ", roleResult.Errors.Select(e => e.Description));
+                return new ApiResponse(400, $"Failed to assign role '{dto.Role}': {roleErrors}. Please make sure the role exists in the database.");
+            }
 
             return new ApiResponse(200, "Registration successful")
             {

@@ -36,7 +36,15 @@ export default function RegisterPage() {
       });
       toast.success('تم إنشاء الحساب بنجاح');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'فشل إنشاء الحساب');
+      // معالجة أفضل للأخطاء
+      const errorMessage = error.message || error.response?.data?.message || 'فشل إنشاء الحساب';
+      const errors = error.response?.data?.errors;
+      
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors.join(' - '));
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }

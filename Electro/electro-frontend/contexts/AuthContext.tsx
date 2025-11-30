@@ -28,6 +28,8 @@ interface RegisterData {
   password: string;
   displayName: string;
   phoneNumber: string;
+  role?: string;
+  image?: File | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -81,29 +83,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const register = async (data: RegisterData) => {
     const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+    formData.append('UserName', data.displayName);
+    formData.append('Email', data.email);
+    formData.append('Password', data.password);
+    formData.append('Role', data.role || 'User');
+    if (data.phoneNumber) {
+      formData.append('PhoneNumber', data.phoneNumber);
+    }
+    if (data.image) {
+      formData.append('Image', data.image);
+    }
     
-    const response = await api.post('/account/register', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    
-    const { token, ...userData } = response.data.data;
-    
-    // حفظ التوكن في localStorage
-    localStorage.setItem('token', token);
-    
-    // حفظ التوكن في cookies أيضاً
-    document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 10}; SameSite=Lax`;
-    
-    // Ensure roles is an array
-    const user = {
-      ...userData,
-      roles: userData.roles || (userData.role ? [userData.role] : [])
-    };
-    setUser(user);
-    router.push('/');
+    try {
+      // عند إرسال FormData، axios يضيف Content-Type تلقائياً مع boundary
+      // الـinterceptor في api.ts يتعامل مع هذا تلقائياً
+      const response = await api.post('/account/register', formData);
+      
+      // بعد نجاح التسجيل نقوم بتسجيل الدخول تلقائياً للحصول على التوكن
+      await login(data.email, data.password);
+    } catch (error: any) {
+      // معالجة أفضل للأخطاء
+      console.error('Registration error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'فشل إنشاء الحساب';
+      const errors = error.response?.data?.errors;
+      
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        throw new Error(errors.join(', '));
+      }
+      
+      throw new Error(errorMessage);
+    }
   };
 
   const logout = () => {

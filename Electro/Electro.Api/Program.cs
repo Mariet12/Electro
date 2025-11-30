@@ -172,6 +172,13 @@ using (var scope = app.Services.CreateScope())
             Console.WriteLine("✅ Role 'Admin' تم إنشاؤه");
         }
 
+        // إنشاء Role "User" لو مش موجود (مطلوب للتسجيل)
+        if (!await roleManager.RoleExistsAsync("User"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("User"));
+            Console.WriteLine("✅ Role 'User' تم إنشاؤه");
+        }
+
         // التحقق من وجود المستخدم
         var adminEmail = "admin@electro.com";
         var existingUser = await userManager.FindByEmailAsync(adminEmail);

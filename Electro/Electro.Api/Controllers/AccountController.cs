@@ -40,17 +40,28 @@ namespace Electro.Apis.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] Register model)
         {
+            _logger.LogInformation("Registration attempt for email: {Email}, UserName: {UserName}, Role: {Role}", 
+                model?.Email, model?.UserName, model?.Role);
+
             if (!ModelState.IsValid)
+            {
+                var errors = ModelState.SelectMany(x => x.Value.Errors)
+                                      .Select(x => x.ErrorMessage)
+                                      .ToList();
+                _logger.LogWarning("ModelState validation failed: {Errors}", string.Join(", ", errors));
                 return BadRequest(CreateValidationErrorResponse());
+            }
 
             try
             {
                 var result = await _accountService.RegisterAsync(model);
+                _logger.LogInformation("Registration result: StatusCode={StatusCode}, Message={Message}", 
+                    result.StatusCode, result.Message);
                 return StatusCode(result.StatusCode, CreateResponse(result));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during registration for email: {Email}", model.Email);
+                _logger.LogError(ex, "Error during registration for email: {Email}", model?.Email);
                 return StatusCode(500, CreateErrorResponse("Registration failed"));
             }
         }
