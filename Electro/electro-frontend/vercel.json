@@ -1,0 +1,10 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "env": {
+    "BACKEND_API_URL": "https://kerolosadel12-002-site1.qtempurl.com/api"
+  }
+}
+

@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5008/api';
+// في production على Vercel، استخدم Next.js API routes كـproxy
+// في development، استخدم الـbackend مباشرة
+const API_URL = 
+  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5008/api')
+    : '/api'; // استخدم Next.js API routes في production
 
 export const api = axios.create({
   baseURL: API_URL,

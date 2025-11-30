@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone', // مهم لـVercel
   images: {
     remotePatterns: [
       {
@@ -33,3 +34,4 @@ const nextConfig = {
 
 module.exports = nextConfig
 
+ 
