@@ -2,10 +2,19 @@ import axios from 'axios';
 
 // في production على Vercel، استخدم Next.js API routes كـproxy
 // في development، استخدم الـbackend مباشرة
-const API_URL = 
-  typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5008/api')
-    : '/api'; // استخدم Next.js API routes في production
+const getApiUrl = () => {
+  if (typeof window === 'undefined') {
+    // Server-side: استخدم environment variable أو الـproxy
+    return process.env.NEXT_PUBLIC_API_URL || '/api';
+  }
+  // Client-side: تحقق من hostname
+  if (window.location.hostname === 'localhost') {
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5008/api';
+  }
+  return '/api'; // استخدم Next.js API routes في production
+};
+
+const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,
