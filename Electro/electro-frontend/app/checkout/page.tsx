@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import Navbar from '@/components/Navbar';
@@ -42,8 +42,13 @@ export default function CheckoutPage() {
     }
   };
 
+  useEffect(() => {
+    if (!cart || cart.items.length === 0) {
+      router.push('/cart');
+    }
+  }, [cart, router]);
+
   if (!cart || cart.items.length === 0) {
-    router.push('/cart');
     return null;
   }
 
