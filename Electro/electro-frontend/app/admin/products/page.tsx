@@ -124,7 +124,7 @@ export default function AdminProductsPage() {
                   {products.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-6 py-8 text-center text-gray-600">
-                        لا توجد منتجات. اضغط "إضافة منتج جديد" للبدء!
+                        لا توجد منتجات. اضغط &quot;إضافة منتج جديد&quot; للبدء!
                       </td>
                     </tr>
                   ) : (

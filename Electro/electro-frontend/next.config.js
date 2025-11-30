@@ -30,6 +30,13 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
+  // تجاهل ESLint warnings أثناء الـbuild (الأخطاء فقط تمنع الـbuild)
+  eslint: {
+    ignoreDuringBuilds: false, // نريد أن تمنع الأخطاء الـbuild
+  },
+  typescript: {
+    ignoreBuildErrors: false, // نريد أن تمنع أخطاء TypeScript الـbuild
+  },
 }
 
 module.exports = nextConfig

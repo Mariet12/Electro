@@ -84,7 +84,7 @@ export default function AdminCategoriesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.length === 0 ? (
               <div className="col-span-full text-center py-12 bg-white rounded-lg">
-                <p className="text-gray-600">لا توجد فئات. اضغط "إضافة فئة جديدة" للبدء!</p>
+                <p className="text-gray-600">لا توجد فئات. اضغط &quot;إضافة فئة جديدة&quot; للبدء!</p>
               </div>
             ) : (
               categories.map((category: any) => (
