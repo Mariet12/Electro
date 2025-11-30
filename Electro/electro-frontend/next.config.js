@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // مهم لـVercel
+  // Vercel لا يحتاج output: 'standalone'
   images: {
     remotePatterns: [
       {

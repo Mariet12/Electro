@@ -4,30 +4,30 @@ const BACKEND_URL = process.env.BACKEND_API_URL || 'https://kerolosadel12-002-si
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: { path: string[] } }
 ) {
-  return proxyRequest(request, params.path, 'GET');
+  return proxyRequest(request, context.params.path, 'GET');
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: { path: string[] } }
 ) {
-  return proxyRequest(request, params.path, 'POST');
+  return proxyRequest(request, context.params.path, 'POST');
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: { path: string[] } }
 ) {
-  return proxyRequest(request, params.path, 'PUT');
+  return proxyRequest(request, context.params.path, 'PUT');
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: { path: string[] } }
 ) {
-  return proxyRequest(request, params.path, 'DELETE');
+  return proxyRequest(request, context.params.path, 'DELETE');
 }
 
 async function proxyRequest(
