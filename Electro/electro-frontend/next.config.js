@@ -16,6 +16,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'elctroapp.runasp.net',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'firebasestorage.googleapis.com',
         pathname: '/v0/b/elctro-ed5d4.appspot.com/o/**',
       },

@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '@/contexts/CartContext';
 import { useState, useMemo, memo, useCallback } from 'react';
 import toast from 'react-hot-toast';
+import api from '@/lib/api';
 
 interface Product {
   id: number;
@@ -26,6 +28,8 @@ interface Product {
 const ProductCard = memo(function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(Boolean(product.isFavorite));
+  const router = useRouter();
 
   const handleAddToCart = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -38,6 +42,38 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product })
       setIsAddingToCart(false);
     }
   }, [product.id, addToCart]);
+
+  const handleToggleFavorite = useCallback(async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    // تأكد من تسجيل الدخول
+    if (typeof window !== 'undefined' && !localStorage.getItem('token')) {
+      toast.error('يرجى تسجيل الدخول لإضافة المنتجات للمفضلة');
+      router.push('/login');
+      return;
+    }
+
+    try {
+      if (!isFavorite) {
+        // API الباك إند متوقع POST على /favorites/{productId}
+        await api.post(`/favorites/${product.id}`);
+        setIsFavorite(true);
+        toast.success('تم الإضافة للمفضلة');
+      } else {
+        await api.delete(`/favorites/${product.id}`);
+        setIsFavorite(false);
+        toast.success('تم الحذف من المفضلة');
+      }
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        toast.error('انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى');
+        router.push('/login');
+        return;
+      }
+      toast.error(error?.response?.data?.message || 'حدث خطأ أثناء تحديث المفضلة');
+      console.error('Favorite toggle error:', error);
+    }
+  }, [isFavorite, product.id, router]);
 
   // Get image URL - prioritize firstImageUrl, then imageUrl, then first image from images array
   const imageUrl = useMemo(() => 
@@ -93,14 +129,10 @@ const ProductCard = memo(function ProductCard({ product }: { product: Product })
           {/* زر المفضلة */}
           <button
             className="absolute top-2 left-2 bg-white p-2 rounded-full shadow-md hover:bg-primary-50 transition"
-            onClick={(e) => {
-              e.preventDefault();
-              // Add to favorites logic
-              toast.success('تم الإضافة للمفضلة');
-            }}
+            onClick={handleToggleFavorite}
           >
             <FiHeart
-              className={product.isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}
+              className={isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}
             />
           </button>
         </div>

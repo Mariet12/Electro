@@ -9,7 +9,7 @@ import { FiHeart } from 'react-icons/fi';
 import Link from 'next/link';
 
 export default function FavoritesPage() {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +19,10 @@ export default function FavoritesPage() {
   const fetchFavorites = async () => {
     try {
       const response = await api.get('/favorites');
-      setFavorites(response.data.data || []);
+      const paged = response.data?.data;
+      const items = paged?.items || paged?.data || paged;
+      // الـAPI بيرجع PagedResult فيها Items، نتأكد إنها Array
+      setFavorites(Array.isArray(items) ? items : []);
     } catch (error) {
       console.error('Error fetching favorites:', error);
     } finally {
