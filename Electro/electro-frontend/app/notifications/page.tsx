@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +19,10 @@ export default function NotificationsPage() {
   const fetchNotifications = async () => {
     try {
       const response = await api.get('/notifications');
-      setNotifications(response.data.data || []);
+      const dto = response.data?.data;
+      // الـAPI بيرجع غالباً PagedResult فيها Items
+      const items = dto?.items || dto?.data || dto;
+      setNotifications(Array.isArray(items) ? items : []);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
@@ -29,7 +32,8 @@ export default function NotificationsPage() {
 
   const markAsRead = async (id: number) => {
     try {
-      await api.put(`/notifications/${id}/read`);
+      // في الباك إند: [HttpPost("{id:int}/read")]
+      await api.post(`/notifications/${id}/read`);
       fetchNotifications();
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -38,7 +42,8 @@ export default function NotificationsPage() {
 
   const markAllAsRead = async () => {
     try {
-      await api.put('/notifications/mark-all-read');
+      // في الباك إند: [HttpPost("read-all")]
+      await api.post('/notifications/read-all');
       fetchNotifications();
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
