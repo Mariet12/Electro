@@ -92,14 +92,39 @@ export default function ChatPage() {
         }
       }
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5008/api';
-      const hubUrl = apiUrl.replace('/api', '') + '/ChatHub';
+      // الحصول على URL الـbackend الصحيح
+      let hubUrl: string;
+      if (typeof window !== 'undefined') {
+        if (window.location.hostname === 'localhost') {
+          // Development: استخدام localhost مباشرة
+          hubUrl = 'http://localhost:5008/ChatHub';
+        } else {
+          // Production: استخدام الـbackend URL مباشرة (ليس عبر proxy)
+          const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://elctroapp.runasp.net/api';
+          hubUrl = backendUrl.replace('/api', '') + '/ChatHub';
+        }
+      } else {
+        hubUrl = 'https://elctroapp.runasp.net/ChatHub';
+      }
+      
+      const HttpTransportType = signalR.HttpTransportType || { WebSockets: 0, LongPolling: 1 };
+      const LogLevel = signalR.LogLevel || { Information: 2 };
       
       const connection = new signalR.HubConnectionBuilder()
         .withUrl(hubUrl, {
           accessTokenFactory: () => token,
+          skipNegotiation: false,
+          transport: (HttpTransportType.WebSockets || 0) | (HttpTransportType.LongPolling || 1),
+        } as any)
+        .withAutomaticReconnect({
+          nextRetryDelayInMilliseconds: (retryContext: any) => {
+            if (retryContext.previousRetryCount < 3) {
+              return 2000; // 2 ثواني
+            }
+            return 5000; // 5 ثواني بعد المحاولة الثالثة
+          }
         })
-        .withAutomaticReconnect()
+        .configureLogging(LogLevel.Information || 2)
         .build();
 
       connection.on('ReceiveMessages', (conversationId: number, senderId: string, senderName: string, senderImage: string, receiverId: string, content: string, date: string) => {
@@ -142,8 +167,23 @@ export default function ChatPage() {
 
       await connection.start();
       connectionRef.current = connection;
+      console.log('✅ SignalR connected successfully');
+      
+      // إضافة معالجات للأحداث
+      connection.onclose((error: any) => {
+        console.log('SignalR connection closed', error);
+      });
+      
+      connection.onreconnecting((error: any) => {
+        console.log('SignalR reconnecting...', error);
+      });
+      
+      connection.onreconnected((connectionId: string) => {
+        console.log('SignalR reconnected', connectionId);
+      });
     } catch (error) {
       console.error('SignalR connection error:', error);
+      toast.error('فشل الاتصال بالشات المباشر. سيتم تحديث الرسائل يدوياً.');
     }
   };
 
