@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.BACKEND_API_URL || 'https://kerolosadel12-002-site1.qtempurl.com/api';
+// عنوان الـAPI النهائي (الإصدار الجديد على elctroapp.runasp.net)
+const BACKEND_URL =
+  process.env.BACKEND_API_URL || 'https://elctroapp.runasp.net/api';
 
 export async function GET(
   request: NextRequest,
