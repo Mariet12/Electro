@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useMemo, useCallback, memo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
-import { FiShoppingCart, FiUser, FiHeart, FiMenu, FiX, FiSearch, FiBell } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiHeart, FiMenu, FiX, FiSearch, FiBell, FiMessageCircle } from 'react-icons/fi';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -67,6 +67,10 @@ export default function Navbar() {
                 
                 <Link href="/notifications" className="relative text-gray-700 hover:text-primary-600">
                   <FiBell size={22} />
+                </Link>
+                
+                <Link href="/chat" className="relative text-gray-700 hover:text-primary-600">
+                  <FiMessageCircle size={22} />
                 </Link>
                 
                 <Link href="/cart" className="relative text-gray-700 hover:text-primary-600">
@@ -194,6 +198,9 @@ export default function Navbar() {
               <>
                 <Link href="/favorites" className="block py-2 text-gray-700">
                   المفضلة
+                </Link>
+                <Link href="/chat" className="block py-2 text-gray-700">
+                  الشات
                 </Link>
                 <Link href="/cart" className="block py-2 text-gray-700">
                   السلة ({cart?.itemsCount || 0})

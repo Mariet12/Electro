@@ -51,7 +51,16 @@ export default function AdminOrdersPage() {
 
   const updateOrderStatus = async (orderId: number, newStatus: string) => {
     try {
-      await api.put(`/orders/${orderId}/status`, { status: newStatus });
+      // تحويل القيم من الفرونت إند إلى الباك إند
+      const statusMap: Record<string, string> = {
+        'Pending': 'Pending',
+        'Processing': 'InProcessing',
+        'Shipped': 'InProcessing',
+        'Delivered': 'Completed',
+        'Cancelled': 'Cancelled'
+      };
+      const backendStatus = statusMap[newStatus] || newStatus;
+      await api.put(`/orders/${orderId}/status`, { Status: backendStatus });
       toast.success('تم تحديث حالة الطلب');
       fetchOrders();
     } catch (error: any) {
@@ -158,13 +167,12 @@ export default function AdminOrdersPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <select
-                          value={order.status}
+                          value={order.status === 'InProcessing' ? 'Processing' : order.status === 'Completed' ? 'Delivered' : order.status}
                           onChange={(e) => updateOrderStatus(order.id, e.target.value)}
                           className="text-sm px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary-500"
                         >
                           <option value="Pending">قيد الانتظار</option>
                           <option value="Processing">قيد المعالجة</option>
-                          <option value="Shipped">تم الشحن</option>
                           <option value="Delivered">تم التوصيل</option>
                           <option value="Cancelled">ملغي</option>
                         </select>
